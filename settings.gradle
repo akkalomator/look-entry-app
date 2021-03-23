@@ -1,3 +1,4 @@
+include ':libCommon'
 include ':libMvp'
 include ':app'
 rootProject.name = "Look Entry App"
