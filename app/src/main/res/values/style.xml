@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MajorButton">
+        <item name="android:padding">10dp</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="ProceedButton" parent="MajorButton">
+        <item name="android:background">@color/accent_color</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NegativeActionButton" parent="MajorButton">
+        <item name="android:background">@color/negative_color</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

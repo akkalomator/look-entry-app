@@ -1,4 +1,4 @@
-package com.akkalomator.libmvp.storage
+package com.akkalomator.libcommon.storage
 
 object Storage {
 
