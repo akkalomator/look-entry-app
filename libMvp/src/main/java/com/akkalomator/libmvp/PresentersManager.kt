@@ -1,6 +1,6 @@
 package com.akkalomator.libmvp
 
-import kotlin.reflect.full.memberFunctions
+import android.util.Log
 
 object PresentersManager {
 
@@ -8,9 +8,9 @@ object PresentersManager {
 
     private val monitor = Any()
 
-    fun<TPresenter : MvpPresenter<TView>, TView : CanAttachDetach> getPresenter(createPresenter: () -> TPresenter) : TPresenter {
+    fun<TPresenter : MvpPresenter<TView>, TView : CanAttachDetach> getPresenter(key: String, createPresenter: () -> TPresenter) : TPresenter {
         synchronized(monitor) {
-            val key = getKey(createPresenter)
+            Log.e(this.toString(), "key=$key task2")
             var presenter = presenters[key] as? TPresenter
             if (presenter == null) {
                 presenter = createPresenter.invoke()
@@ -20,12 +20,7 @@ object PresentersManager {
         }
     }
 
-    private fun getKey(createPresenter: () -> MvpPresenter<*>) =
-        createPresenter::class.java.declaredMethods[0].returnType.name
-
-    fun destroyPresenter(presenter: MvpPresenter<CanAttachDetach>) {
-        val key = presenter.javaClass.name
-        presenters[key]?.onDetached()
+    fun destroyPresenter(key: String) {
         presenters.remove(key)
     }
 }

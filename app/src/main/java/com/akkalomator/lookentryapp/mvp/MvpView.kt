@@ -1,7 +1,7 @@
 package com.akkalomator.lookentryapp.mvp
 
 import android.app.Activity
-import android.content.res.Resources
+import android.content.Context
 import android.util.Log
 import com.akkalomator.libmvp.CanAttachDetach
 
@@ -9,8 +9,7 @@ abstract class MvpView<TPresenter: CanAttachDetach>(
     activity: Activity
 ) : CanAttachDetach {
 
-
-    protected val resources: Resources = activity.resources
+    protected val context: Context = activity
     protected var presenter: TPresenter? = null
 
     val router = Router(activity)

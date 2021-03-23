@@ -29,7 +29,6 @@ class MainActivityView(activity: MvpActivity<*, *>) :
     }
 
     override fun renderState(state: MainActivityContract.State) {
-        Log.d(this.toString(), "$state task2")
         when (state) {
             is MainActivityContract.State.Ping -> {
                 binding.codeLayout.visible = false
@@ -39,11 +38,11 @@ class MainActivityView(activity: MvpActivity<*, *>) :
 
                 binding.status.text = when (state.status) {
                     MainActivityContract.State.Ping.PingStatus.ONGOING ->
-                        resources.getString(R.string.ping_ongoing)
+                        context.resources.getString(R.string.ping_ongoing)
                     MainActivityContract.State.Ping.PingStatus.FAIL ->
-                        resources.getString(R.string.ping_failed)
+                        context.resources.getString(R.string.ping_failed)
                     MainActivityContract.State.Ping.PingStatus.SUCCESS ->
-                        resources.getString(R.string.ping_successful)
+                        context.resources.getString(R.string.ping_successful)
                 }
             }
 

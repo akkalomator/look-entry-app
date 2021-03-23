@@ -15,7 +15,7 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
     private var code: Int? = null
 
     override fun onViewAttached() {
-        runWhileViewAttached(
+        runWhilePresenterAlive(
             Api().ping().toTask(
                 onSuccess = {
                     pingStatus = when (it.status) {
@@ -101,7 +101,9 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
 
     override fun showProfile() {
         withView {
-            router.gotoContentPage()
+            sid?.let {
+                router.gotoContentPage(it)
+            }
         }
     }
 

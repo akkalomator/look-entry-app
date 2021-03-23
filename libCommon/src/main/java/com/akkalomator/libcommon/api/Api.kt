@@ -3,6 +3,7 @@ package com.akkalomator.libcommon.api
 import com.akkalomator.libcommon.items.CodeRequestBody
 import com.akkalomator.libcommon.items.CodeResponse
 import com.akkalomator.libcommon.items.PingResponse
+import com.akkalomator.libcommon.items.Profile
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,6 +39,18 @@ class Api {
                     CodeResponse.Fail
                 else
                     CodeResponse.Success(sid)
+            }
+    }
+
+    fun getProfile(sid: String): Single<Profile> {
+        return api.getProfile(sid)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .map {
+                if (it.body() == null) {
+                    throw NullPointerException("Response body is null")
+                }
+                it.body()
             }
     }
 
