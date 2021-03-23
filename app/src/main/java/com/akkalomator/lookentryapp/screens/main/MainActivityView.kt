@@ -49,7 +49,7 @@ class MainActivityView(activity: MvpActivity<*, *>) :
             is MainActivityContract.State.Code -> {
                 binding.codeLayout.visible = true
                 binding.status.visible = false
-                binding.btnCodeUsed.visible = true
+                binding.btnCodeUsed.visible = false
                 binding.btnRemoveCurrentProfile.visible = false
 
                 binding.tvCode.text = state.code.toString()

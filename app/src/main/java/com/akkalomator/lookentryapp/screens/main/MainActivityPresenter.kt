@@ -8,11 +8,13 @@ import com.akkalomator.libcommon.items.PingResponse
 import com.akkalomator.libmvp.tasks.toTask
 import kotlin.random.Random
 
-class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContract.MainActivityPresenter {
+class MainActivityPresenter : MvpPresenter<MainActivityView>(),
+    MainActivityContract.MainActivityPresenter {
 
     private var pingStatus = MainActivityContract.State.Ping.PingStatus.ONGOING
     private var sid: String? = null
     private var code: Int? = null
+    private var codeAccepted = false
 
     override fun onViewAttached() {
         runWhilePresenterAlive(
@@ -52,6 +54,12 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
         val code = Random.nextInt(1000000)
         this.code = code
 
+        sendCode(code)
+
+        renderState()
+    }
+
+    private fun sendCode(code: Int) {
         runWhilePresenterAlive {
             Api().sendCode(code)
                 .subscribe(
@@ -67,6 +75,21 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
                                 saveSid(it.sid)
                                 renderState()
                             }
+                            is CodeResponse.CodeAccepted -> {
+                                codeAccepted = true
+                                executeDelayedWhilePresenterAlive(10000L) {
+                                    sendCode(code)
+                                }
+                            }
+                            CodeResponse.CodeInUse -> {
+                                if (!codeAccepted) {
+                                    generateCode()
+                                } else {
+                                    executeDelayedWhilePresenterAlive(10000L) {
+                                        sendCode(code)
+                                    }
+                                }
+                            }
                         }
                     },
                     {
@@ -76,8 +99,6 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
                     }
                 )
         }
-
-        renderState()
     }
 
     private fun saveSid(sid: String) {
@@ -88,7 +109,9 @@ class MainActivityPresenter: MvpPresenter<MainActivityView>(), MainActivityContr
         withView {
             val code = code
             val state = when {
-                pingStatus != MainActivityContract.State.Ping.PingStatus.SUCCESS -> MainActivityContract.State.Ping(pingStatus)
+                pingStatus != MainActivityContract.State.Ping.PingStatus.SUCCESS -> MainActivityContract.State.Ping(
+                    pingStatus
+                )
                 sid != null -> MainActivityContract.State.Ready(code)
                 code != null -> MainActivityContract.State.Code(code)
                 else -> MainActivityContract.State.Ping(pingStatus)

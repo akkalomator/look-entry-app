@@ -5,5 +5,11 @@ sealed class CodeResponse {
         val sid: String
     ) : CodeResponse()
 
+    data class CodeAccepted(
+        val sid: String
+    ) : CodeResponse()
+
+    object CodeInUse : CodeResponse()
+
     object Fail : CodeResponse()
 }

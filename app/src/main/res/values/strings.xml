@@ -17,4 +17,5 @@
     <string name="remove_current_profile">Remove current profile</string>
     <string name="sid_error_msg">Your sid is invalid</string>
     <string name="loading">Loading...</string>
+    <string name="awaiting_code_confirmation_msg">Enter this code into web client</string>
 </resources>

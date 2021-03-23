@@ -35,10 +35,12 @@ class Api {
             .subscribeOn(Schedulers.io())
             .map {
                 val sid = it.headers()["Set-Cookie"]
-                if (sid == null)
-                    CodeResponse.Fail
-                else
-                    CodeResponse.Success(sid)
+                when {
+                    it.code() == 422 -> CodeResponse.CodeInUse
+                    sid == null -> CodeResponse.Fail
+                    it.code() == 200 -> CodeResponse.Success(sid)
+                    else -> CodeResponse.CodeAccepted(sid)
+                }
             }
     }
 
